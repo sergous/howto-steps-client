@@ -1,5 +1,5 @@
 import { StoreCore, RootStore } from '.';
-import { createSpyObj } from '../api';
+import { createSpyObj } from '../utils';
 import { StoreCoreError } from '../errors';
 import { ApiModel, ParseObject } from '../models';
 

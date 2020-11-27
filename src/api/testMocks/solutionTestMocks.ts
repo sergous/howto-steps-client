@@ -2,7 +2,7 @@ import {
     createParseQueryMock,
     createParseMobxMock,
     createParseObjectMock,
-} from '.';
+} from '../../utils';
 import { SolutionApi } from '..';
 import { ApiModel } from '../../models';
 

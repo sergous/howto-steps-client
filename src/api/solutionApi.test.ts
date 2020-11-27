@@ -1,4 +1,5 @@
-import { createSolutionApiMock, createParseObjectMock } from '.';
+import { createSolutionApiMock } from '.';
+import { createParseObjectMock } from '../utils';
 
 describe('SolutionApi', () => {
     let api: any;
