@@ -1,4 +1,5 @@
-import { StoreCore, RootStore, ParseObject } from '.';
+import { ParseObject } from '../models';
+import { StoreCore, RootStore } from '.';
 import { QuestionModel } from '../models';
 import { QuestionStoreError } from '../errors';
 import { action } from 'mobx';

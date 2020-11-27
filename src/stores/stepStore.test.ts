@@ -1,6 +1,5 @@
 import { RootStore, StepStore } from '.';
 import { StepStoreError } from '../errors';
-import { StepModel } from '../models';
 
 describe('step store', () => {
     let store: StepStore;
