@@ -1,15 +1,11 @@
-import { StoreCore, RootStore } from '.';
+import { StoreCore } from '.';
 import { SolutionModel, QuestionModel, ParseObject } from '../models';
 import { SolutionStoreError } from '../errors';
 import { observable, computed, action, runInAction } from 'mobx';
-import { SolutionApi } from '../api';
 
 export class SolutionStore extends StoreCore {
     ERROR = SolutionStoreError;
-
-    constructor(rootStore: RootStore, api: SolutionApi) {
-        super(rootStore, api);
-    }
+    items: SolutionModel[] = [];
 
     @observable solutionQuery = '';
 
@@ -18,7 +14,7 @@ export class SolutionStore extends StoreCore {
     }
 
     get solutions(): SolutionModel[] {
-        return <SolutionModel[]>this.items;
+        return this.items as SolutionModel[];
     }
 
     @action
