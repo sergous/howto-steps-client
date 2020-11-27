@@ -1,9 +1,10 @@
-import { ApiModel, ItemModel, ItemsModel, ParseObject } from '../models';
-import { action, runInAction } from 'mobx';
+import { ParseObject } from '../models';
+import { action } from 'mobx';
 
 import { StoreCoreError } from '../errors';
 import { RootStore } from '.';
 
+// TODO: Implement method placeholders
 export class StoreCore {
     ERROR = StoreCoreError;
     rootStore: RootStore;
@@ -13,23 +14,15 @@ export class StoreCore {
         this.rootStore = rootStore;
     }
 
-    set questions(questions: ParseObject[]) {
-        this.items = questions;
-    }
+    create(item: ParseObject) {}
 
-    get questions(): ParseObject[] {
-        return <ParseObject[]>this.items;
-    }
-
-    // TODO: Remove method placeholders after ItemModel removal
-    create(item: ItemModel) {}
-    remove(item: ItemModel) {}
+    remove(item: ParseObject) {}
 
     @action
-    updateOneAttr(question: ParseObject, name: string, value: any) {}
+    updateOneAttr(item: ParseObject, name: string, value: any) {}
 
     @action
-    async deleteOne(question: ParseObject) {}
+    async deleteOne(item: ParseObject) {}
 
     @action
     async fetchAll() {}
