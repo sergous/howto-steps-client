@@ -5,26 +5,28 @@ export class ApiModel {
     constructor(protected query: any, protected parseMobx: any) {}
 
     @action
-    async createOne(data: any): Promise<any> {}
-
-    @action
-    async updateOneAttr(solution: ParseObject, name: string, value: any) {
-        return await solution.set(name, value).save();
+    updateOneAttr(item: ParseObject, name: string, value: any) {
+        return item.set(name, value);
     }
 
     @action
-    async deleteOne(solution: ParseObject) {
-        return await solution.destroy();
+    async saveOne(item: ParseObject): Promise<ParseObject> {
+        return await item.save();
     }
 
     @action
-    async deleteListItem(solutions: ParseObject[], solution: ParseObject) {
-        await this.parseMobx.deleteListItem(solutions, solution);
+    async deleteOne(item: ParseObject) {
+        return await item.destroy();
+    }
+
+    @action
+    async deleteListItem(items: ParseObject[], item: ParseObject) {
+        await this.parseMobx.deleteListItem(items, item);
     }
 
     @action
     async findAll() {
-        const solutions = await this.query.find();
-        return this.parseMobx.toParseMobx(solutions);
+        const items = await this.query.find();
+        return this.parseMobx.toParseMobx(items);
     }
 }

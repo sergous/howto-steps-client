@@ -7,7 +7,7 @@ import { QuestionApi } from '../api';
 describe('question store', () => {
     let store: QuestionStore;
     const apiMock = createSpyObj('QuestionApiSpy', [
-        'createOne',
+        'saveOne',
         'updateOneAttr',
         'deleteOne',
         'deleteListItem',
@@ -31,7 +31,7 @@ describe('question store', () => {
     it('should create a question', () => {
         const query = 'When is the best time?';
         store.createOne(query);
-        expect(apiMock.createOne).toHaveBeenCalled();
+        expect(apiMock.saveOne).toHaveBeenCalled();
     });
 
     it('should update a question', () => {
