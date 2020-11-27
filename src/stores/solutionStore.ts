@@ -1,5 +1,5 @@
 import { StoreCore, RootStore } from '.';
-import { SolutionModel, QuestionModel } from '../models';
+import { SolutionModel, QuestionModel, ParseObject } from '../models';
 import { SolutionStoreError } from '../errors';
 import { observable, computed, action, runInAction } from 'mobx';
 import { SolutionApi } from '../api';
@@ -7,8 +7,8 @@ import { SolutionApi } from '../api';
 export class SolutionStore extends StoreCore {
     ERROR = SolutionStoreError;
 
-    constructor(rootStore: RootStore, private api: SolutionApi) {
-        super(rootStore);
+    constructor(rootStore: RootStore, api: SolutionApi) {
+        super(rootStore, api);
     }
 
     @observable solutionQuery = '';
@@ -22,33 +22,10 @@ export class SolutionStore extends StoreCore {
     }
 
     @action
-    async createOne(question: QuestionModel): Promise<SolutionModel> {
-        const solution = await this.api.createOne(question);
-        runInAction(() => {
-            this.solutions.push(solution);
-        });
-        return solution;
-    }
-
-    @action
-    updateOneAttr(solution: SolutionModel, name: string, value: any) {
-        this.api.updateOneAttr(solution, name, value);
-    }
-
-    @action
-    async deleteOne(solution: SolutionModel) {
-        await this.api.deleteOne(solution);
-        runInAction(() => {
-            this.api.deleteListItem(this.solutions, solution);
-        });
-    }
-
-    @action
-    async fetchAll() {
-        const solutions = await this.api.findAll();
-        runInAction(() => {
-            this.solutions = solutions;
-        });
+    async createOne(question: QuestionModel): Promise<ParseObject> {
+        const solution = new SolutionModel();
+        super.updateOneAttr(solution, 'question', question);
+        return await super.saveOne(solution);
     }
 
     @action
@@ -77,7 +54,7 @@ export class SolutionStore extends StoreCore {
             this.solutionQuery
         );
         runInAction(() => {
-            this.createOne(question);
+            super.saveOne(question);
         });
     }
 }

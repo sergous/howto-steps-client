@@ -7,7 +7,7 @@ import { SolutionApi } from '../api';
 describe('solution store', () => {
     let store: SolutionStore;
     const apiMock = createSpyObj('SolutionApiSpy', [
-        'createOne',
+        'saveOne',
         'updateOneAttr',
         'deleteOne',
         'deleteListItem',
@@ -15,9 +15,10 @@ describe('solution store', () => {
     ]);
 
     beforeEach(() => {
-        store = new SolutionStore(new RootStore(), <SolutionApi>(
-            (<unknown>apiMock)
-        ));
+        store = new SolutionStore(
+            new RootStore(),
+            <SolutionApi>(<unknown>apiMock)
+        );
     });
 
     it('should set ERROR', () => {
@@ -33,7 +34,7 @@ describe('solution store', () => {
     it('should create a solution', () => {
         const question = new QuestionModel();
         store.createOne(question);
-        expect(apiMock.createOne).toHaveBeenCalled();
+        expect(apiMock.saveOne).toHaveBeenCalled();
     });
 
     it('should update a question', () => {
