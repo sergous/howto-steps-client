@@ -1,4 +1,4 @@
-import { ApiModel, ItemsModel, ParseObject } from '../models';
+import { ApiModel, ItemModel, ItemsModel, ParseObject } from '../models';
 import { action, runInAction } from 'mobx';
 
 import { StoreCoreError } from '../errors';
@@ -20,6 +20,10 @@ export class StoreCore {
     get questions(): ParseObject[] {
         return <ParseObject[]>this.items;
     }
+
+    // TODO: Remove method placeholders after ItemModel removal
+    create(item: ItemModel) {}
+    remove(item: ItemModel) {}
 
     @action
     updateOneAttr(question: ParseObject, name: string, value: any) {}
