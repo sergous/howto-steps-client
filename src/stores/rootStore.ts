@@ -8,7 +8,14 @@ import {
     RequestStore,
 } from '.';
 import { UserStore } from './userStore';
-import { QuestionApi, SolutionApi } from '../api';
+import {
+    AnswerApi,
+    QuestionApi,
+    SolutionApi,
+    StepApi,
+    TagApi,
+    UserApi,
+} from '../api';
 
 export class RootStore {
     uiStore: UiStore;
@@ -24,10 +31,10 @@ export class RootStore {
         this.uiStore = new UiStore(this);
         this.questionStore = new QuestionStore(this, new QuestionApi());
         this.solutionStore = new SolutionStore(this, new SolutionApi());
-        this.answerStore = new AnswerStore(this);
-        this.stepStore = new StepStore(this);
-        this.userStore = new UserStore(this);
-        this.tagStore = new TagStore(this);
-        this.requestStore = new RequestStore(this);
+        this.answerStore = new AnswerStore(this, new AnswerApi());
+        this.stepStore = new StepStore(this, new StepApi());
+        this.userStore = new UserStore(this, new UserApi());
+        this.tagStore = new TagStore(this, new TagApi());
+        this.requestStore = new RequestStore(this, new QuestionApi());
     }
 }
