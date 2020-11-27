@@ -25,10 +25,11 @@ describe('StoreCore', () => {
         expect(store.rootStore).toBeInstanceOf(RootStore);
     });
 
-    it('should save an item', () => {
+    it('should save an item', async () => {
         const item = new ParseObject();
-        store.saveOne(item);
+        await store.saveOne(item);
         expect(apiMock.saveOne).toHaveBeenCalled();
+        expect(store.items).toContain(item);
     });
 
     it('should update an item', () => {
@@ -37,6 +38,8 @@ describe('StoreCore', () => {
         store.updateOneAttr(item, 'query', query);
         expect(apiMock.updateOneAttr).toHaveBeenCalled();
     });
+
+    // TODO: test update item field value in store
 
     it('should delete an item', async () => {
         const item = new ParseObject();

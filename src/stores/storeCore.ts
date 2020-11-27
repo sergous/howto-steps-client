@@ -31,7 +31,6 @@ export class StoreCore {
     @action
     updateOneAttr(item: ParseObject, name: string, value: any) {
         this.api.updateOneAttr(item, name, value);
-        // TODO: update item in store
     }
 
     @action
@@ -39,7 +38,6 @@ export class StoreCore {
         await this.api.deleteOne(item);
         runInAction(() => {
             this.api.deleteListItem(this.items, item);
-            // TODO: delete item from store
         });
     }
 
