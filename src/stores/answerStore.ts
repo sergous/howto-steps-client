@@ -10,6 +10,6 @@ export class AnswerStore extends StoreCore {
     }
 
     get answers(): AnswerModel[] {
-        return <AnswerModel[]>this.items;
+        return this.items as AnswerModel[];
     }
 }

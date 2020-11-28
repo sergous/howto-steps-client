@@ -1,6 +1,5 @@
 import { RootStore, TagStore } from '.';
 import { TagStoreError } from '../errors';
-import { TagModel } from '../models';
 
 describe('tag store', () => {
     let store: TagStore;

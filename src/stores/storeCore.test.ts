@@ -15,7 +15,7 @@ describe('StoreCore', () => {
 
     beforeEach(() => {
         const rootStore = new RootStore();
-        store = new StoreCore(rootStore, <ApiModel>(<unknown>apiMock));
+        store = new StoreCore(rootStore, (apiMock as unknown) as ApiModel);
         apiMock.deleteOne.mockReturnValue(Promise.resolve);
     });
 

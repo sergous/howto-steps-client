@@ -17,7 +17,7 @@ describe('solution store', () => {
     beforeEach(() => {
         store = new SolutionStore(
             new RootStore(),
-            <SolutionApi>(<unknown>apiMock)
+            (apiMock as unknown) as SolutionApi
         );
     });
 

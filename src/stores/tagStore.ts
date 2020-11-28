@@ -10,6 +10,6 @@ export class TagStore extends StoreCore {
     }
 
     get tags(): TagModel[] {
-        return <TagModel[]>this.items;
+        return this.items as TagModel[];
     }
 }

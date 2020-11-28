@@ -10,6 +10,6 @@ export class UserStore extends StoreCore {
     }
 
     get users(): UserModel[] {
-        return <UserModel[]>this.items;
+        return this.items as UserModel[];
     }
 }

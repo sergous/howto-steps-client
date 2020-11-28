@@ -17,7 +17,7 @@ describe('question store', () => {
     beforeEach(() => {
         store = new QuestionStore(
             new RootStore(),
-            <QuestionApi>(<unknown>apiMock)
+            (apiMock as unknown) as QuestionApi
         );
         apiMock.deleteOne.mockReturnValue(Promise.resolve);
     });
