@@ -34,7 +34,7 @@
         "mobx": "^6.0.4",
         "mobx-react": "^7.0.5",
         "parse": "^2.18.0",
-        "parse-mobx": "^0.1.4",
+        "parse-mobx": "git://github.com/sergous/parse-mobx.git#patch-1",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "react-scripts": "4.0.1",
