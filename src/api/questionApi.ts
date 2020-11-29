@@ -1,14 +1,11 @@
 import { action } from 'mobx';
-import { ApiModel } from '../models';
-import { Parse, ParseMobx } from '.';
-
-const QUESTION = 'Question';
-const Question = Parse.Object.extend(QUESTION);
+import { ApiModel, Question, questionQuery } from '../models';
+import { ParseMobx } from '.';
 
 export class QuestionApi extends ApiModel {
     constructor(
         private question = new Question(),
-        query = new Parse.Query(QUESTION),
+        query = questionQuery,
         parseMobx: any = ParseMobx
     ) {
         super(query, parseMobx);

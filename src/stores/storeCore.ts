@@ -1,5 +1,5 @@
 import { ApiModel, ParseObject } from '../models';
-import { action, runInAction } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
 
 import { StoreCoreError } from '../errors';
 import { RootStore } from '.';
@@ -9,7 +9,7 @@ export class StoreCore {
     ERROR = StoreCoreError;
     rootStore: RootStore;
     api: ApiModel;
-    items: ParseObject[] = [];
+    @observable items: ParseObject[] = [];
 
     constructor(rootStore: RootStore, api: ApiModel) {
         this.rootStore = rootStore;
@@ -43,9 +43,9 @@ export class StoreCore {
 
     @action
     async fetchAll() {
-        const questions = await this.api.findAll();
+        const items = await this.api.findAll();
         runInAction(() => {
-            this.items = questions;
+            this.items = items;
         });
     }
 }

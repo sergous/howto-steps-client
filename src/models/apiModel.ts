@@ -27,6 +27,6 @@ export class ApiModel {
     @action
     async findAll() {
         const items = await this.query.find();
-        return this.parseMobx.toParseMobx(items);
+        return items;
     }
 }

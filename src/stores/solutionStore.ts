@@ -5,7 +5,6 @@ import { observable, computed, action, runInAction } from 'mobx';
 
 export class SolutionStore extends StoreCore {
     ERROR = SolutionStoreError;
-    items: SolutionModel[] = [];
 
     @observable solutionQuery = '';
 
@@ -13,6 +12,7 @@ export class SolutionStore extends StoreCore {
         this.items = solutions;
     }
 
+    @observable
     get solutions(): SolutionModel[] {
         return this.items as SolutionModel[];
     }
@@ -20,14 +20,15 @@ export class SolutionStore extends StoreCore {
     @action
     async createOne(question: QuestionModel): Promise<ParseObject> {
         const solution = new SolutionModel();
-        super.updateOneAttr(solution, 'question', question);
-        return await super.saveOne(solution);
+        this.updateOneAttr(solution, 'question', question);
+        return await this.saveOne(solution);
     }
 
     @action
-    readonly search = (query: string) => {
+    async search(query: string) {
         this.solutionQuery = query;
-    };
+        this.items = await this.api.findAll();
+    }
 
     @computed
     get foundSolutions() {
@@ -50,7 +51,7 @@ export class SolutionStore extends StoreCore {
             this.solutionQuery
         );
         runInAction(() => {
-            super.saveOne(question);
+            this.saveOne(question);
         });
     }
 }
