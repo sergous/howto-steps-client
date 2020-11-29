@@ -15,6 +15,7 @@ import {
     StepApi,
     TagApi,
     UserApi,
+    QuestionRequestApi,
 } from '../api';
 
 export class RootStore {
@@ -35,6 +36,6 @@ export class RootStore {
         this.stepStore = new StepStore(this, new StepApi());
         this.userStore = new UserStore(this, new UserApi());
         this.tagStore = new TagStore(this, new TagApi());
-        this.requestStore = new RequestStore(this, new QuestionApi());
+        this.requestStore = new RequestStore(this, new QuestionRequestApi());
     }
 }

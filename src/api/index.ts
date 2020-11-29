@@ -4,7 +4,7 @@ import { ParseMobx } from 'parse-mobx';
 export * from './solutionApi';
 export * from './questionApi';
 export * from './stepApi';
-export * from './questionApi';
+export * from './questionRequestApi';
 export * from './tagApi';
 export * from './userApi';
 export * from './answerApi';
