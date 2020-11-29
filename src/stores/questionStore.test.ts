@@ -7,7 +7,7 @@ import { QuestionApi } from '../api';
 describe('question store', () => {
     let store: QuestionStore;
     const apiMock = createSpyObj('QuestionApiSpy', [
-        'saveOne',
+        'createOne',
         'updateOneAttr',
         'deleteOne',
         'deleteListItem',
@@ -15,10 +15,9 @@ describe('question store', () => {
     ]);
 
     beforeEach(() => {
-        store = new QuestionStore(
-            new RootStore(),
-            (apiMock as unknown) as QuestionApi
-        );
+        store = new QuestionStore(new RootStore(), <QuestionApi>(
+            (<unknown>apiMock)
+        ));
         apiMock.deleteOne.mockReturnValue(Promise.resolve);
     });
 
@@ -31,7 +30,7 @@ describe('question store', () => {
     it('should create a question', () => {
         const query = 'When is the best time?';
         store.createOne(query);
-        expect(apiMock.saveOne).toHaveBeenCalled();
+        expect(apiMock.createOne).toHaveBeenCalled();
     });
 
     it('should update a question', () => {

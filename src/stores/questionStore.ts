@@ -1,24 +1,51 @@
-import { ParseObject } from '../models';
-import { StoreCore } from '.';
+import { StoreCore, RootStore } from '.';
 import { QuestionModel } from '../models';
 import { QuestionStoreError } from '../errors';
-import { action } from 'mobx';
+import { action, runInAction } from 'mobx';
+import { QuestionApi } from '../api';
 
 export class QuestionStore extends StoreCore {
     ERROR = QuestionStoreError;
+
+    constructor(rootStore: RootStore, private api: QuestionApi) {
+        super(rootStore);
+    }
 
     set questions(questions: QuestionModel[]) {
         this.items = questions;
     }
 
     get questions(): QuestionModel[] {
-        return this.items as QuestionModel[];
+        return <QuestionModel[]>this.items;
     }
 
     @action
-    async createOne(query: string): Promise<ParseObject> {
-        const question = new QuestionModel();
-        super.updateOneAttr(question, 'query', query);
-        return await super.saveOne(question as ParseObject);
+    async createOne(query: string): Promise<QuestionModel> {
+        const question = await this.api.createOne(query);
+        runInAction(() => {
+            this.questions.push(question);
+        });
+        return question;
+    }
+
+    @action
+    updateOneAttr(question: QuestionModel, name: string, value: any) {
+        this.api.updateOneAttr(question, name, value);
+    }
+
+    @action
+    async deleteOne(question: QuestionModel) {
+        await this.api.deleteOne(question);
+        runInAction(() => {
+            this.api.deleteListItem(this.questions, question);
+        });
+    }
+
+    @action
+    async fetchAll() {
+        const questions = await this.api.findAll();
+        runInAction(() => {
+            this.questions = questions;
+        });
     }
 }

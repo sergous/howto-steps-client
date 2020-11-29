@@ -1,16 +1,25 @@
-import { Parse, QuestionModel, TagModel } from '.';
+import { ItemModel, QuestionModel, ItemsModel } from '.';
 import { observable } from 'mobx';
+import { RequestStore } from '../stores';
 import { RequestModelError } from '../errors';
 
-class QuestionRequestAttributes {
-    @observable question: QuestionModel = new QuestionModel();
-    @observable tags: TagModel[] = [];
-}
+export class QuestionRequestModel extends ItemModel {
+    @observable private question_?: QuestionModel;
 
-export class QuestionRequestModel extends Parse.Object {
-    @observable get attributes(): QuestionRequestAttributes {
-        return super.attributes;
-    }
+    tags = new ItemsModel();
 
     ERROR = RequestModelError;
+
+    constructor(question?: QuestionModel, store?: RequestStore) {
+        super(store);
+        this.question_ = question;
+    }
+
+    set question(question: QuestionModel | undefined) {
+        this.question_ = question;
+    }
+
+    get question(): QuestionModel | undefined {
+        return this.question_;
+    }
 }

@@ -1,19 +1,42 @@
+import Parse from 'parse';
+import { ParseMobx } from 'parse-mobx';
 import { action } from 'mobx';
-import { QuestionModel, ApiModel, solutionQuery, Solution } from '../models';
-import { ParseMobx } from '.';
+import { QuestionModel, SolutionModel } from '../models';
 
-export class SolutionApi extends ApiModel {
+const SOLUTION = 'Solution';
+const Solution = Parse.Object.extend(SOLUTION);
+
+export class SolutionApi {
     constructor(
         private solution = new Solution(),
-        query = solutionQuery,
-        parseMobx: any = ParseMobx
-    ) {
-        super(query, parseMobx);
+        private query = new Parse.Query(SOLUTION),
+        private parseMobx: any = ParseMobx
+    ) {}
+
+    @action
+    async createOne(question: QuestionModel) {
+        await this.solution.set('question', question).save();
+        return this.parseMobx.toParseMobx(this.solution);
     }
 
     @action
-    async createOne(question: QuestionModel): Promise<typeof Solution> {
-        await this.solution.set('question', question).save();
-        return this.parseMobx.toParseMobx(this.solution);
+    async updateOneAttr(solution: SolutionModel, name: string, value: any) {
+        return await solution.set(name, value).save();
+    }
+
+    @action
+    async deleteOne(solution: SolutionModel) {
+        return await solution.destroy();
+    }
+
+    @action
+    async deleteListItem(solutions: SolutionModel[], solution: SolutionModel) {
+        await this.parseMobx.deleteListItem(solutions, solution);
+    }
+
+    @action
+    async findAll() {
+        const solutions = await this.query.find();
+        return this.parseMobx.toParseMobx(solutions);
     }
 }

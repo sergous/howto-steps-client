@@ -10,7 +10,7 @@ export class RoleUserModel extends UserModel {
     }
 
     set role(role: UserRole) {
-        if ((Object as any).values(RoleUserModel.ROLE).includes(this.role_))
+        if ((<any>Object).values(RoleUserModel.ROLE).includes(this.role_))
             throw new RoleUserModelError('role is immutable');
         this.role_ = role;
     }

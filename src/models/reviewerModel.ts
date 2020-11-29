@@ -5,7 +5,7 @@ import { action } from 'mobx';
 export class ReviewerModel extends RoleUserModel {
     assignedSolutions = new ItemsModel();
     reviewedSolutions = new ItemsModel();
-    role_ = ReviewerModel.ROLE.Reviewer;
+    role = ReviewerModel.ROLE.Reviewer;
 
     @action
     assignSolution(solution: SolutionModel) {

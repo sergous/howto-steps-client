@@ -1,10 +1,15 @@
-import { StoreCore } from '.';
-import { SolutionModel, QuestionModel, ParseObject } from '../models';
+import { StoreCore, RootStore } from '.';
+import { SolutionModel, QuestionModel } from '../models';
 import { SolutionStoreError } from '../errors';
 import { observable, computed, action, runInAction } from 'mobx';
+import { SolutionApi } from '../api';
 
 export class SolutionStore extends StoreCore {
     ERROR = SolutionStoreError;
+
+    constructor(rootStore: RootStore, private api: SolutionApi) {
+        super(rootStore);
+    }
 
     @observable solutionQuery = '';
 
@@ -12,36 +17,50 @@ export class SolutionStore extends StoreCore {
         this.items = solutions;
     }
 
-    @observable
     get solutions(): SolutionModel[] {
-        return this.items as SolutionModel[];
+        return <SolutionModel[]>this.items;
     }
 
     @action
-    async createOne(question: QuestionModel): Promise<ParseObject> {
-        const solution = new SolutionModel();
-        this.updateOneAttr(solution, 'question', question);
-        return await this.saveOne(solution);
+    async createOne(question: QuestionModel): Promise<SolutionModel> {
+        const solution = await this.api.createOne(question);
+        runInAction(() => {
+            this.solutions.push(solution);
+        });
+        return solution;
     }
 
     @action
-    async search(query: string) {
+    updateOneAttr(solution: SolutionModel, name: string, value: any) {
+        this.api.updateOneAttr(solution, name, value);
+    }
+
+    @action
+    async deleteOne(solution: SolutionModel) {
+        await this.api.deleteOne(solution);
+        runInAction(() => {
+            this.api.deleteListItem(this.solutions, solution);
+        });
+    }
+
+    @action
+    async fetchAll() {
+        const solutions = await this.api.findAll();
+        runInAction(() => {
+            this.solutions = solutions;
+        });
+    }
+
+    @action
+    readonly search = (query: string) => {
         this.solutionQuery = query;
-        this.items = await this.api.findAll();
-    }
+    };
 
     @computed
     get foundSolutions() {
-        return this.solutionsWithQuestion.filter(
-            (s: SolutionModel) =>
-                s.attributes.question.attributes!.query === this.solutionQuery
-        );
-    }
-
-    @computed
-    get solutionsWithQuestion() {
         return this.solutions.filter(
-            (s: SolutionModel) => !!s.attributes.question
+            (s: SolutionModel) =>
+                s.attributes.question.attributes.query === this.solutionQuery
         );
     }
 
@@ -51,7 +70,7 @@ export class SolutionStore extends StoreCore {
             this.solutionQuery
         );
         runInAction(() => {
-            this.saveOne(question);
+            this.createOne(question);
         });
     }
 }

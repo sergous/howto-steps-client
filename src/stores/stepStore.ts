@@ -10,6 +10,6 @@ export class StepStore extends StoreCore {
     }
 
     get steps(): StepModel[] {
-        return this.items as StepModel[];
+        return this.items;
     }
 }

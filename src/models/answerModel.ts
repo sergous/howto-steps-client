@@ -1,16 +1,9 @@
-import { Parse, TagModel, StepModel } from '.';
-import { observable } from 'mobx';
+import { ItemModel, ItemsModel } from '.';
 import { AnswerModelError } from '../errors';
 
-class AnswerAttributes {
-    @observable steps: StepModel[] = [];
-    @observable tags: TagModel[] = [];
-}
-
-export class AnswerModel extends Parse.Object {
-    @observable get attributes(): AnswerAttributes {
-        return super.attributes;
-    }
+export class AnswerModel extends ItemModel {
+    steps = new ItemsModel();
+    tags = new ItemsModel();
 
     ERROR = AnswerModelError;
 }

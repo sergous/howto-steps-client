@@ -1,54 +1,105 @@
 import { StoreCore, RootStore } from '.';
-import { createSpyObj } from '../utils';
+import { ItemModel } from '../models';
 import { StoreCoreError } from '../errors';
-import { ApiModel, ParseObject } from '../models';
 
 describe('StoreCore', () => {
-    let store: StoreCore;
-    const apiMock = createSpyObj('ApiMockSpy', [
-        'saveOne',
-        'updateOneAttr',
-        'deleteOne',
-        'deleteListItem',
-        'findAll',
-    ]);
-
+    let storeCore: StoreCore;
+    let item: ItemModel;
     beforeEach(() => {
         const rootStore = new RootStore();
-        store = new StoreCore(rootStore, (apiMock as unknown) as ApiModel);
-        apiMock.deleteOne.mockReturnValue(Promise.resolve);
-    });
-
-    it('should hold ref to root store', () => {
-        expect(store).toHaveProperty('rootStore');
-        expect(store.rootStore).toBeDefined();
-        expect(store.rootStore).toBeInstanceOf(RootStore);
-    });
-
-    it('should save an item', async () => {
-        const item = new ParseObject();
-        await store.saveOne(item);
-        expect(apiMock.saveOne).toHaveBeenCalled();
-        expect(store.items).toContain(item);
-    });
-
-    it('should update an item', () => {
-        const item = new ParseObject();
-        const query = 'When is the best place?';
-        store.updateOneAttr(item, 'query', query);
-        expect(apiMock.updateOneAttr).toHaveBeenCalled();
-    });
-
-    // TODO: test update item field value in store
-
-    it('should delete an item', async () => {
-        const item = new ParseObject();
-        await store.deleteOne(item);
-        expect(apiMock.deleteOne).toHaveBeenCalled();
-        expect(apiMock.deleteListItem).toHaveBeenCalled();
+        storeCore = new StoreCore(rootStore);
     });
 
     it('should set ERROR', () => {
-        expect(store.ERROR).toBe(StoreCoreError);
+        expect(storeCore.ERROR).toBe(StoreCoreError);
+    });
+
+    describe('newId', () => {
+        it('should return new string id', () => {
+            const newId = storeCore.newId;
+            expect(newId).toBeDefined();
+            expect(typeof newId).toBe('string');
+        });
+        it('should create unique id', () => {
+            const a = storeCore.newId;
+            const b = storeCore.newId;
+            expect(a).not.toBe(b);
+        });
+    });
+
+    describe('add', () => {
+        it('should add item with id', () => {
+            item = new ItemModel();
+            expect(storeCore.add(item)).toBe(item);
+        });
+        it('should not add item with no id', () => {
+            item = new ItemModel();
+            item.id = undefined;
+            const addItem = () => storeCore.add(item);
+            expect(addItem).toThrowError(StoreCoreError);
+        });
+    });
+
+    describe('with item', () => {
+        beforeEach(() => {
+            item = storeCore.create();
+        });
+
+        it('should have item', () => {
+            expect(storeCore.items).toContain(item);
+        });
+
+        it('should find item', () => {
+            expect(storeCore.findOne(item)).toBe(item);
+        });
+
+        it('should not add same item', () => {
+            const add = () => storeCore.add(item);
+            expect(add).toThrowError(StoreCoreError);
+        });
+
+        it('should update item', () => {
+            const i = storeCore.update(item);
+            expect(i).toBeDefined();
+            expect(i!.id).toEqual(item.id);
+        });
+        it('should not update item', () => {
+            const notExistingItem = <ItemModel>{
+                ...item,
+                id: storeCore.newId,
+            };
+            const update = () => storeCore.update(notExistingItem);
+            expect(update).toThrowError(StoreCoreError);
+        });
+
+        it('should remove item', () => {
+            storeCore.remove(item);
+            expect(storeCore.items).not.toContain(item);
+        });
+        it('should not remove item', () => {
+            const notExistingItem = <ItemModel>{
+                ...item,
+                id: storeCore.newId,
+            };
+            const remove = () => storeCore.remove(notExistingItem);
+            expect(remove).toThrowError(StoreCoreError);
+        });
+
+        describe('find', () => {
+            it('should find existing item', () => {
+                expect(storeCore.findOne(item)).toBe(item);
+            });
+            it('should find not existing item', () => {
+                const outItem = { ...item, id: storeCore.newId };
+                expect(storeCore.findOne(outItem)).toBeUndefined();
+            });
+            it('should find existing item index', () => {
+                expect(storeCore.findIndex(item)).toBe(0);
+            });
+            it('should find not existing item index', () => {
+                const outItem = { ...item, id: storeCore.newId };
+                expect(storeCore.findIndex(outItem)).toBeUndefined();
+            });
+        });
     });
 });

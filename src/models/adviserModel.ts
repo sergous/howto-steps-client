@@ -5,7 +5,7 @@ import { action } from 'mobx';
 export class AdviserModel extends RoleUserModel {
     questions = new ItemsModel();
     solutions = new ItemsModel();
-    role_ = AdviserModel.ROLE.Adviser;
+    role = AdviserModel.ROLE.Adviser;
 
     @action
     assignQuestion(question: QuestionModel) {
@@ -14,7 +14,7 @@ export class AdviserModel extends RoleUserModel {
 
     @action
     adviseSolution(solution: SolutionModel) {
-        const question = solution.attributes.question;
+        const question = solution.question;
         this.questions.remove(question);
         this.solutions.add(solution);
     }

@@ -1,4 +1,3 @@
-import Parse from 'parse';
 import { ItemModel } from './itemModel';
 export * from './datatypes';
 export * from './userModel';
@@ -14,7 +13,4 @@ export * from './statusModel';
 export * from './tagModel';
 export * from './questionRequestModel';
 export * from './itemsModel';
-export * from './apiModel';
-export { ItemModel, Parse };
-
-export class ParseObject extends Parse.Object {}
+export { ItemModel };

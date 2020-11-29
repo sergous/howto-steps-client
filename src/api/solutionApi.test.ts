@@ -1,5 +1,4 @@
-import { createSolutionApiMock } from '.';
-import { createParseObjectMock } from '../utils';
+import { createSolutionApiMock, createParseQuestionMock } from '.';
 
 describe('SolutionApi', () => {
     let api: any;
@@ -9,7 +8,7 @@ describe('SolutionApi', () => {
     });
 
     it('should create solution', async () => {
-        const question = createParseObjectMock();
+        const question = createParseQuestionMock();
 
         await api.createOne(question);
 
@@ -18,7 +17,7 @@ describe('SolutionApi', () => {
     });
 
     it("should update one solution's attribute", () => {
-        const question = createParseObjectMock();
+        const question = createParseQuestionMock();
 
         api.updateOneAttr(api.solution, 'question', question);
 

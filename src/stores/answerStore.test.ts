@@ -19,4 +19,16 @@ describe('answer store', () => {
     it('should set ERROR', () => {
         expect(store.ERROR).toBe(AnswerStoreError);
     });
+
+    describe('with answer', () => {
+        let answer: AnswerModel;
+
+        beforeEach(() => {
+            answer = new AnswerModel(store);
+        });
+
+        it('should have answer', () => {
+            expect(store.answers).toContain(answer);
+        });
+    });
 });

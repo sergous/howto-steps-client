@@ -10,6 +10,6 @@ export class RequestStore extends StoreCore {
     }
 
     get questionRequests(): QuestionRequestModel[] {
-        return this.items as QuestionRequestModel[];
+        return this.items;
     }
 }
