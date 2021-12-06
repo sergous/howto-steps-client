@@ -37,7 +37,7 @@ function runDevelopment() {
     const persistRootStore = persist(RootStore)(rootStore);
 
     const hydrate = create({
-        storege: localStorage,
+        storage: localStorage,
     });
 
     const result = hydrate(PERSIST_STORE, persistRootStore);
