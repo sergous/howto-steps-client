@@ -13,19 +13,23 @@ export interface RootStoreProps {
 class SolutionList extends Component<RootStoreProps> {
     private readonly solutionStore = this.props.rootStore!.solutionStore;
 
+    componentDidMount() {
+        this.solutionStore.search();
+    }
+
     render() {
         return (
             <Layout>
                 <Search
                     size="large"
                     placeholder="Ask how-to question"
-                    onSearch={this.solutionStore.search}
+                    onSearch={query => this.solutionStore.search(query)}
                     enterButton
                 />
-                {this.solutionStore.foundSolutions.length > 0 ? (
+                {this.solutionStore.solutionsList.length ? (
                     <List
                         itemLayout="horizontal"
-                        dataSource={this.solutionStore.foundSolutions}
+                        dataSource={this.solutionStore.solutionsList}
                         renderItem={(solution: SolutionModel) => (
                             <List.Item>
                                 <List.Item.Meta
@@ -38,13 +42,14 @@ class SolutionList extends Component<RootStoreProps> {
                         )}
                     />
                 ) : (
-                    <Button
-                        // disabled={!this.solutionStore.solutionQuery}
-                        onClick={() => this.solutionStore.createFromQuery()}
-                    >
-                        Publish Question
-                    </Button>
+                    'Solution list is empty'
                 )}
+                <Button
+                    // disabled={!this.solutionStore.solutionQuery}
+                    onClick={() => this.solutionStore.createFromQuery()}
+                >
+                    Publish Question
+                </Button>
             </Layout>
         );
     }

@@ -36,7 +36,12 @@ export class SolutionApi {
 
     @action
     async findAll() {
-        const solutions = await this.query.find();
+        return this.findByQuery('');
+    }
+
+    @action
+    async findByQuery(query: string) {
+        const solutions = await this.query.find(query);
         return this.parseMobx.toParseMobx(solutions);
     }
 }

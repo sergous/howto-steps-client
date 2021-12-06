@@ -52,16 +52,31 @@ export class SolutionStore extends StoreCore {
     }
 
     @action
-    readonly search = (query: string) => {
+    async fetchSome() {
+        const solutions = await this.api.findByQuery(this.solutionQuery);
+        runInAction(() => {
+            this.solutions = solutions;
+        });
+    }
+
+    @action
+    async search(query: string = '') {
         this.solutionQuery = query;
-    };
+        this.fetchSome();
+    }
 
     @computed
     get foundSolutions() {
-        return this.solutions.filter(
-            (s: SolutionModel) =>
-                s.attributes.question.attributes.query === this.solutionQuery
+        return this.solutions.filter((s: SolutionModel) =>
+            s.attributes.question.attributes.query.includes(this.solutionQuery)
         );
+    }
+
+    @computed
+    get solutionsList(): SolutionModel[] {
+        return this.solutionQuery.length > 0
+            ? this.foundSolutions
+            : this.solutions;
     }
 
     @action
